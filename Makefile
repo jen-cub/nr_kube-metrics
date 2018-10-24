@@ -1,22 +1,36 @@
-LICENSE_KEY ?= replace-me
+ifeq ($(strip $(NEWRELIC_LICENSE_KEY)),)
+$(error NEWRELIC_LICENSE_KEY is not set)
+endif
 
-RELEASE 		?= p4-newrelic
+NEWRELIC_CHART_VERSION	?= 0.6.0
+NEWRELIC_NAMESPACE			?= kube-system
+NEWRELIC_RELEASE 				?= p4-newrelic
 
-NAMESPACE		?= kube-system
+DEV_CLUSTER=p4-development
+PROD_CLUSTER=planet4-production
 
-VERSION			?= 0.0.4
-
-.DEFAULT_GOAL := deploy
+.DEFAULT_GOAL := status
 
 .PHONY: clean deploy status
 
-all: clean deploy
-
 clean:
-	helm delete $(RELEASE) --purge
+	helm delete $(NEWRELIC_RELEASE) --purge
 
 status:
-	helm status $(RELEASE)
+	helm status $(NEWRELIC_RELEASE)
 
-deploy:
-	helm upgrade --install $(RELEASE) stable/newrelic-infrastructure --version $(VERSION) --set licenseKey=$(LICENSE_KEY) --namespace $(NAMESPACE)
+dev:
+	@helm upgrade --install $(NEWRELIC_RELEASE) stable/newrelic-infrastructure \
+		--namespace $(NEWRELIC_NAMESPACE) \
+		--set cluster=$(DEV_CLUSTER) \
+		--set licenseKey=$(NEWRELIC_LICENSE_KEY) \
+		--values resources.yaml \
+		--version $(NEWRELIC_CHART_VERSION)
+
+prod:
+	@helm upgrade --install $(NEWRELIC_RELEASE) stable/newrelic-infrastructure \
+		--namespace $(NEWRELIC_NAMESPACE) \
+		--set cluster=$(PROD_CLUSTER) \
+		--set licenseKey=$(NEWRELIC_LICENSE_KEY) \
+		--values resources.yaml \
+		--version $(NEWRELIC_CHART_VERSION)
