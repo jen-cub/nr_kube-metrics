@@ -6,7 +6,7 @@
 
 ## Preparation:
 
-```
+```bash
 LICENSE_KEY=<newrelic-licensekey> make dev
 # or
 LICENSE_KEY=<newrelic-licensekey> make prod
