@@ -7,7 +7,9 @@
 ## Preparation:
 
 ```
-LICENSE_KEY=<newrelic-licensekey> RELEASE=<my-release> NAMESPACE=<my-namespace> make deploy
+LICENSE_KEY=<newrelic-licensekey> make dev
+# or
+LICENSE_KEY=<newrelic-licensekey> make prod
 ```
 
 ## Dining:
