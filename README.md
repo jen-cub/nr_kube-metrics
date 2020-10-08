@@ -3,6 +3,10 @@
 ## Ingredients:
 -   helm client [https://docs.helm.sh/using_helm/](https://docs.helm.sh/using_helm/)
 -   an accessible Kubernetes cluster running Helm Tiller
+-   NewRelic nri-bundle chart https://artifacthub.io/packages/helm/newrelic/nri-bundle
+      configured to include infrastructure and kube-state-metrics chart
+-   NewRelic LicenseKey
+
 
 ## Preparation:
 
@@ -16,8 +20,8 @@ LICENSE_KEY=<newrelic-licensekey> make prod
 
 Visit [https://infrastructure.newrelic.com](https://infrastructure.newrelic.com) to view server data
 
-## Cleaning up:
+## Delete the deployment:
 
 ```
-make clean
+make destroy
 ```
