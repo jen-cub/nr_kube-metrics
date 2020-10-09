@@ -29,4 +29,4 @@ newrelic-infrastructure:
     requests:
       cpu: 100m
       memory: 150Mi
-  event_queue_depth: 3000
+  eventQueueDepth: 3000
