@@ -39,6 +39,7 @@ endif
 	helm upgrade --install --force --wait $(RELEASE) \
 		--namespace $(NAMESPACE) \
 		--set global.licenseKey=$(NEWRELIC_LICENSE) \
+		--set global.cluster=$(DEV_CLUSTER) \
 		--values values.yaml \
 		--version $(CHART_VERSION) \
 		$(CHART_NAME)
@@ -53,6 +54,7 @@ endif
 	helm upgrade --install --force --wait $(RELEASE) \
 		--namespace $(NAMESPACE) \
 		--set global.licenseKey=$(NEWRELIC_LICENSE) \
+		--set global.cluster=$(PROD_CLUSTER) \
 		--values values.yaml \
 		--version $(CHART_VERSION) \
 		$(CHART_NAME)
