@@ -31,9 +31,9 @@ status:
 	helm status $(RELEASE)
 
 dev: lint init
-	ifndef CI
-		$(error Please commit and push, this is intended to be run in a CI environment)
-	endif
+ifndef CI
+	$(error Please commit and push, this is intended to be run in a CI environment)
+endif
 	@helm upgrade --install $(RELEASE) $(CHART_NAME) \
 		--namespace $(NAMESPACE) \
 		--set cluster=$(DEV_CLUSTER) \
@@ -42,9 +42,9 @@ dev: lint init
 		--version $(CHART_VERSION)
 
 prod: lint init
-	ifndef CI
-		$(error Please commit and push, this is intended to be run in a CI environment)
-	endif
+ifndef CI
+	$(error Please commit and push, this is intended to be run in a CI environment)
+endif
 	@helm upgrade --install $(RELEASE) $(CHART_NAME) \
 		--namespace $(NAMESPACE) \
 		--set cluster=$(PROD_CLUSTER) \
