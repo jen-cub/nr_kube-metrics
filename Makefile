@@ -1,12 +1,6 @@
-ifeq ($(strip $(NEWRELIC_LICENSE_KEY)),)
-$(error NEWRELIC_LICENSE_KEY is not set)
+ifeq ($(strip $(NEWRELIC_LICENSE)),)
+$(error NEWRELIC_LICENSE key is not set)
 endif
-
-RELEASE := p4-newrelic
-NAMESPACE	:= kube-system
-
-CHART_NAME := newrelic/nri-bundle
-CHART_VERSION	:= 1.7.2
 
 DEV_CLUSTER ?= p4-development
 DEV_PROJECT ?= planet-4-151612
@@ -15,6 +9,12 @@ DEV_ZONE ?= us-central1-a
 PROD_CLUSTER ?= planet4-production
 PROD_PROJECT ?= planet4-production
 PROD_ZONE ?= us-central1-a
+
+RELEASE := p4-newrelic
+NAMESPACE	:= kube-system
+
+CHART_NAME := newrelic/nri-bundle
+CHART_VERSION	:= 1.7.2
 
 .DEFAULT_GOAL := status
 
@@ -37,7 +37,7 @@ dev: lint init
 	@helm upgrade --install $(RELEASE) $(CHART_NAME) \
 		--namespace $(NAMESPACE) \
 		--set cluster=$(DEV_CLUSTER) \
-		--set licenseKey=$(NEWRELIC_LICENSE_KEY) \
+		--set licenseKey=$(NEWRELIC_LICENSE) \
 		--values values.yaml \
 		--version $(CHART_VERSION)
 		--set infrastructure.enabled=true
@@ -54,7 +54,7 @@ prod: lint init
 	@helm upgrade --install $(RELEASE) $(CHART_NAME) \
 		--namespace $(NAMESPACE) \
 		--set cluster=$(PROD_CLUSTER) \
-		--set licenseKey=$(NEWRELIC_LICENSE_KEY) \
+		--set licenseKey=$(NEWRELIC_LICENSE) \
 		--values values.yaml \
 		--version $(CHART_VERSION)
 		--set infrastructure.enabled=true
