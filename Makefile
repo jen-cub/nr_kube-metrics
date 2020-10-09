@@ -1,5 +1,5 @@
-ifeq ($(strip $(NEWRELIC_LICENSE)),)
-$(error NEWRELIC_LICENSE key is not set)
+ifeq ($(strip $(NEWRELIC_REST_API_KEY)),)
+$(error NEWRELIC_REST_API_KEY key is not set)
 endif
 
 DEV_CLUSTER ?= p4-development
@@ -38,7 +38,7 @@ endif
 	gcloud container clusters get-credentials $(DEV_CLUSTER) --zone $(DEV_ZONE) --project $(DEV_PROJECT)
 	helm upgrade --install --force --wait $(RELEASE) \
 		--namespace $(NAMESPACE) \
-		--set global.licenseKey=$(NEWRELIC_LICENSE) \
+		--set global.licenseKey=$(NEWRELIC_REST_API_KEY) \
 		--set global.cluster=$(DEV_CLUSTER) \
 		--values values.yaml \
 		--version $(CHART_VERSION) \
@@ -53,7 +53,7 @@ endif
 	gcloud container clusters get-credentials $(PROD_PROJECT) --zone $(PROD_ZONE) --project $(PROD_PROJECT)
 	helm upgrade --install --force --wait $(RELEASE) \
 		--namespace $(NAMESPACE) \
-		--set global.licenseKey=$(NEWRELIC_LICENSE) | base64 --decode \
+		--set global.licenseKey=$(NEWRELIC_REST_API_KEY) \
 		--set global.cluster=$(PROD_CLUSTER) \
 		--values values.yaml \
 		--version $(CHART_VERSION) \
