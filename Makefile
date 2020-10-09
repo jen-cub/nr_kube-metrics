@@ -34,23 +34,27 @@ dev: lint init
 ifndef CI
 	$(error Please commit and push, this is intended to be run in a CI environment)
 endif
-	@helm upgrade --install $(RELEASE) $(CHART_NAME) \
+	helm upgrade --install --force --wait $(RELEASE) \
 		--namespace $(NAMESPACE) \
 		--set cluster=$(DEV_CLUSTER) \
 		--set licenseKey=$(NEWRELIC_LICENSE) \
 		--values values.yaml \
-		--version $(CHART_VERSION)
+		--version $(CHART_VERSION) \
+		$(CHART_NAME)
+	$(MAKE) history
 
 prod: lint init
 ifndef CI
 	$(error Please commit and push, this is intended to be run in a CI environment)
 endif
-	@helm upgrade --install $(RELEASE) $(CHART_NAME) \
+	helm upgrade --install --force --wait $(RELEASE) \
 		--namespace $(NAMESPACE) \
 		--set cluster=$(PROD_CLUSTER) \
 		--set licenseKey=$(NEWRELIC_LICENSE) \
 		--values values.yaml \
-		--version $(CHART_VERSION)
+		--version $(CHART_VERSION) \
+		$(CHART_NAME)
+	$(MAKE) history
 
 destroy:
 	helm delete $(RELEASE) --purge
