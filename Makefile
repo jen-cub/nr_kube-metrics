@@ -38,7 +38,7 @@ endif
 	gcloud container clusters get-credentials $(DEV_CLUSTER) --zone $(DEV_ZONE) --project $(DEV_PROJECT)
 	helm upgrade --install --force --wait $(RELEASE) \
 		--namespace $(NAMESPACE) \
-		--set licenseKey=$(NEWRELIC_LICENSE) \
+		--set global.licenseKey=$(NEWRELIC_LICENSE) \
 		--values values.yaml \
 		--version $(CHART_VERSION) \
 		$(CHART_NAME)
@@ -52,7 +52,7 @@ endif
 	gcloud container clusters get-credentials $(PROD_PROJECT) --zone $(PROD_ZONE) --project $(PROD_PROJECT)
 	helm upgrade --install --force --wait $(RELEASE) \
 		--namespace $(NAMESPACE) \
-		--set licenseKey=$(NEWRELIC_LICENSE) \
+		--set global.licenseKey=$(NEWRELIC_LICENSE) \
 		--values values.yaml \
 		--version $(CHART_VERSION) \
 		$(CHART_NAME)
