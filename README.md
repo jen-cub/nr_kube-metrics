@@ -3,21 +3,24 @@
 ## Ingredients:
 -   helm client [https://docs.helm.sh/using_helm/](https://docs.helm.sh/using_helm/)
 -   an accessible Kubernetes cluster running Helm Tiller
+-   NewRelic nri-bundle chart https://artifacthub.io/packages/helm/newrelic/nri-bundle
+      configured to include infrastructure and kube-state-metrics chart
+-   NewRelic LicenseKey
+
 
 ## Preparation:
 
-```bash
-LICENSE_KEY=<newrelic-licensekey> make dev
-# or
-LICENSE_KEY=<newrelic-licensekey> make prod
-```
+As we do not have a license for Dev, all changes only go to Prod.
+
+- Create branch to make changes and commit and push to for circleci job to run
+- Create pull request to master, get approved and then merge for production deployment
 
 ## Dining:
 
 Visit [https://infrastructure.newrelic.com](https://infrastructure.newrelic.com) to view server data
 
-## Cleaning up:
+## Delete the deployment:
 
 ```
-make clean
+make destroy
 ```

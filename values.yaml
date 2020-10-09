@@ -1,0 +1,31 @@
+---
+infrastructure:
+  enabled: true
+prometheus:
+  enabled: false
+webhook:
+  enabled: false
+ksm:
+  enabled: true
+kubeEvents:
+  enabled: false
+logging:
+  enabled: false
+
+kube-state-metrics:
+  # need to downgrade for k8 1.15 ..
+  # but then upgrade and remove this section as soon as 1.16 is done.
+  tag: v1.8.0
+  volumeattachments: false
+  validatingwebhookconfigurations: false
+  mutatingwebhookconfigurations: false
+  networkpolicies: false
+
+newrelic-infrastructure:
+  resources:
+    limits:
+      cpu: 300m
+      memory: 200Mi
+    requests:
+      cpu: 100m
+      memory: 150Mi

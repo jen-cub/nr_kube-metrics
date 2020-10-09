@@ -1,36 +1,60 @@
-ifeq ($(strip $(NEWRELIC_LICENSE_KEY)),)
-$(error NEWRELIC_LICENSE_KEY is not set)
+ifeq ($(strip $(NEWRELIC_LICENSE)),)
+$(error NEWRELIC_LICENSE key is not set)
 endif
 
-NEWRELIC_CHART_VERSION	?= 0.6.0
-NEWRELIC_NAMESPACE			?= kube-system
-NEWRELIC_RELEASE 				?= p4-newrelic
+DEV_CLUSTER ?= p4-development
+DEV_PROJECT ?= planet-4-151612
+DEV_ZONE ?= us-central1-a
 
-DEV_CLUSTER=p4-development
-PROD_CLUSTER=planet4-production
+PROD_CLUSTER ?= planet4-production
+PROD_PROJECT ?= planet4-production
+PROD_ZONE ?= us-central1-a
+
+RELEASE := p4-newrelic
+NAMESPACE	:= kube-system
+
+CHART_NAME := newrelic/nri-bundle
+CHART_VERSION	:= 1.7.2
 
 .DEFAULT_GOAL := status
 
-.PHONY: clean deploy status
+lint:
+	@find . -type f -name '*.yml' | xargs yamllint
+	@find . -type f -name '*.yaml' | xargs yamllint
 
-clean:
-	helm delete $(NEWRELIC_RELEASE) --purge
+init:
+		helm init --client-only
+		helm repo add newrelic https://helm-charts.newrelic.com
+		helm repo update
 
 status:
-	helm status $(NEWRELIC_RELEASE)
+	helm status $(RELEASE)
 
-dev:
-	@helm upgrade --install $(NEWRELIC_RELEASE) stable/newrelic-infrastructure \
-		--namespace $(NEWRELIC_NAMESPACE) \
+dev: lint init
+	ifndef CI
+		$(error Please commit and push, this is intended to be run in a CI environment)
+	endif
+	@helm upgrade --install $(RELEASE) $(CHART_NAME) \
+		--namespace $(NAMESPACE) \
 		--set cluster=$(DEV_CLUSTER) \
-		--set licenseKey=$(NEWRELIC_LICENSE_KEY) \
-		--values resources.yaml \
-		--version $(NEWRELIC_CHART_VERSION)
+		--set licenseKey=$(NEWRELIC_LICENSE) \
+		--values values.yaml \
+		--version $(CHART_VERSION)
 
-prod:
-	@helm upgrade --install $(NEWRELIC_RELEASE) stable/newrelic-infrastructure \
-		--namespace $(NEWRELIC_NAMESPACE) \
+prod: lint init
+	ifndef CI
+		$(error Please commit and push, this is intended to be run in a CI environment)
+	endif
+	@helm upgrade --install $(RELEASE) $(CHART_NAME) \
+		--namespace $(NAMESPACE) \
 		--set cluster=$(PROD_CLUSTER) \
-		--set licenseKey=$(NEWRELIC_LICENSE_KEY) \
-		--values resources.yaml \
-		--version $(NEWRELIC_CHART_VERSION)
+		--set licenseKey=$(NEWRELIC_LICENSE) \
+		--values values.yaml \
+		--version $(CHART_VERSION)
+
+destroy:
+	helm delete $(RELEASE) --purge
+
+
+history:
+	helm history $(RELEASE) --max=5
