@@ -40,12 +40,6 @@ dev: lint init
 		--set licenseKey=$(NEWRELIC_LICENSE) \
 		--values values.yaml \
 		--version $(CHART_VERSION)
-		--set infrastructure.enabled=true
-		--set prometheus.enabled=false
-		--set webhook.enabled=false
-		--set ksm.enabled=true
-		--set kubeEvents.enabled=false
-		--set logging.enabled=false
 
 prod: lint init
 	ifndef CI
@@ -57,12 +51,6 @@ prod: lint init
 		--set licenseKey=$(NEWRELIC_LICENSE) \
 		--values values.yaml \
 		--version $(CHART_VERSION)
-		--set infrastructure.enabled=true
-		--set prometheus.enabled=false
-		--set webhook.enabled=false
-		--set ksm.enabled=true
-		--set kubeEvents.enabled=false
-		--set logging.enabled=false
 
 destroy:
 	helm delete $(RELEASE) --purge
