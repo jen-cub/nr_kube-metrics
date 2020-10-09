@@ -34,8 +34,8 @@ dev: lint init
 ifndef CI
 	$(error Please commit and push, this is intended to be run in a CI environment)
 endif
-gcloud config set project $(DEV_PROJECT)
-gcloud container clusters get-credentials $(DEV_CLUSTER) --zone $(DEV_ZONE) --project $(DEV_PROJECT)
+	gcloud config set project $(DEV_PROJECT)
+	gcloud container clusters get-credentials $(DEV_CLUSTER) --zone $(DEV_ZONE) --project $(DEV_PROJECT)
 	helm upgrade --install --force --wait $(RELEASE) \
 		--namespace $(NAMESPACE) \
 		--set licenseKey=$(NEWRELIC_LICENSE) \
