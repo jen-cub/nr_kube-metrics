@@ -2,13 +2,11 @@ ifeq ($(strip $(NEWRELIC_INFRA)),)
 $(error NEWRELIC_INFRA key is not set)
 endif
 
-DEV_CLUSTER ?= p4-development
-DEV_PROJECT ?= planet-4-151612
-DEV_ZONE ?= us-central1-a
+DEV_CLUSTER ?= testrc
+DEV_PROJECT ?= jendevops1
+DEV_ZONE ?= australia-southeast1-c
 
-PROD_CLUSTER ?= planet4-production
-PROD_PROJECT ?= planet4-production
-PROD_ZONE ?= us-central1-a
+
 
 RELEASE := p4-newrelic
 NAMESPACE	:= kube-system
