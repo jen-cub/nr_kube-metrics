@@ -1,6 +1,6 @@
 ---
 infrastructure:
-  enabled: true
+  enabled: false
 prometheus:
   enabled: false
 webhook:
